@@ -1,0 +1,2097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASDES Studio — AI-Powered Development</title>
+<meta name="description" content="ASDES Studio builds products at the speed of thought. AI-powered development, product strategy, and autonomous systems. Sydney, Australia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN SYSTEM — LIQUID GLASS EDITION
+   ============================================================ */
+:root {
+  --near-black: #0C0C0E;
+  --ivory: #F5F3EE;
+  --amber: #C47A3A;
+  --amber-glow: rgba(196, 122, 58, 0.15);
+  --amber-subtle: rgba(196, 122, 58, 0.06);
+  --amber-bright: #D4893F;
+
+  /* Glass surfaces */
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-bg-hover: rgba(255, 255, 255, 0.05);
+  --glass-bg-elevated: rgba(255, 255, 255, 0.06);
+  --glass-bg-nav: rgba(12, 12, 14, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-hover: rgba(255, 255, 255, 0.14);
+  --glass-specular: rgba(255, 255, 255, 0.12);
+  --glass-inner-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+
+  /* Depth levels */
+  --blur-sm: 12px;
+  --blur-md: 24px;
+  --blur-lg: 40px;
+  --blur-xl: 60px;
+
+  /* Surfaces */
+  --bg-primary: #060608;
+  --bg-secondary: #0E0E11;
+  --bg-tertiary: #161619;
+
+  /* Text */
+  --text-primary: #F5F3EE;
+  --text-secondary: rgba(245, 243, 238, 0.55);
+  --text-muted: rgba(245, 243, 238, 0.3);
+
+  /* Typography */
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+  --space-5xl: 128px;
+  --space-6xl: 192px;
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-pill: 100px;
+
+  /* Transitions */
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+::selection {
+  background: var(--amber);
+  color: var(--near-black);
+}
+
+/* ============================================================
+   NOISE OVERLAY — Film grain texture
+   ============================================================ */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* ============================================================
+   AMBIENT MESH — Animated background light
+   ============================================================ */
+.ambient-mesh {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.4;
+  will-change: transform;
+}
+
+.ambient-orb-1 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(196, 122, 58, 0.15) 0%, transparent 70%);
+  top: -10%; left: 20%;
+  animation: orb-drift-1 20s ease-in-out infinite;
+}
+
+.ambient-orb-2 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(196, 122, 58, 0.08) 0%, transparent 70%);
+  top: 40%; right: -5%;
+  animation: orb-drift-2 25s ease-in-out infinite;
+}
+
+.ambient-orb-3 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(80, 60, 120, 0.08) 0%, transparent 70%);
+  bottom: 10%; left: -5%;
+  animation: orb-drift-3 22s ease-in-out infinite;
+}
+
+@keyframes orb-drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(60px, 40px) scale(1.1); }
+  66% { transform: translate(-30px, 80px) scale(0.95); }
+}
+
+@keyframes orb-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-50px, -30px) scale(1.05); }
+  66% { transform: translate(40px, -60px) scale(0.9); }
+}
+
+@keyframes orb-drift-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(70px, -50px) scale(1.08); }
+}
+
+/* ============================================================
+   GLASS MATERIAL SYSTEM
+   ============================================================ */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur-md)) saturate(1.5);
+  -webkit-backdrop-filter: blur(var(--blur-md)) saturate(1.5);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-inner-shadow),
+              0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: background 0.4s var(--ease-out-expo),
+              border-color 0.4s var(--ease-out-expo),
+              box-shadow 0.4s var(--ease-out-expo),
+              transform 0.5s var(--ease-out-expo);
+}
+
+.glass:hover {
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border-hover);
+}
+
+.glass-elevated {
+  background: var(--glass-bg-elevated);
+  backdrop-filter: blur(var(--blur-lg)) saturate(1.6) brightness(1.05);
+  -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(1.6) brightness(1.05);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-inner-shadow),
+              0 16px 48px rgba(0, 0, 0, 0.4),
+              0 0 0 0.5px rgba(255, 255, 255, 0.05);
+}
+
+/* Specular edge highlight — simulates light hitting glass rim */
+.glass-specular::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 10%, var(--glass-specular) 50%, transparent 90%);
+  border-radius: inherit;
+  z-index: 1;
+}
+
+/* ============================================================
+   PRELOADER
+   ============================================================ */
+.preloader {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: var(--near-black);
+  z-index: 10001;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s var(--ease-out-expo), visibility 0.8s;
+}
+
+.preloader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.preloader-logo {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 10vw, 80px);
+  font-weight: 700;
+  color: var(--ivory);
+  letter-spacing: 0.2em;
+  overflow: hidden;
+}
+
+.preloader-logo .char {
+  display: inline-block;
+  transform: translateY(120%);
+  opacity: 0;
+}
+
+.preloader-logo .char.amber { color: var(--amber); }
+
+.preloader-bar {
+  width: 120px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  margin-top: var(--space-2xl);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.preloader-bar-fill {
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  width: 0%;
+  background: var(--amber);
+  border-radius: 2px;
+  transition: width 0.08s linear;
+}
+
+/* ============================================================
+   NAVIGATION — Glass pill bar
+   ============================================================ */
+.nav-wrapper {
+  position: fixed;
+  top: var(--space-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: auto;
+  max-width: calc(100% - 48px);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xl);
+  padding: 12px var(--space-xl);
+  background: var(--glass-bg-nav);
+  backdrop-filter: blur(var(--blur-lg)) saturate(1.8);
+  -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(1.8);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+              inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
+  transition: all 0.5s var(--ease-out-expo);
+}
+
+.nav.scrolled {
+  background: rgba(12, 12, 14, 0.8);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5),
+              inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+}
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--ivory);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-logo-bar {
+  width: 18px;
+  height: 2px;
+  background: var(--amber);
+  border-radius: 1px;
+}
+
+.nav-links {
+  display: flex;
+  gap: var(--space-lg);
+  list-style: none;
+  align-items: center;
+}
+
+.nav-links a {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+  transition: color 0.3s var(--ease-out-expo);
+  white-space: nowrap;
+}
+
+.nav-links a:hover {
+  color: var(--text-primary);
+}
+
+.nav-cta {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: var(--near-black) !important;
+  background: var(--ivory);
+  padding: 7px 18px;
+  border-radius: var(--radius-pill);
+  transition: all 0.3s var(--spring) !important;
+}
+
+.nav-cta:hover {
+  background: var(--amber) !important;
+  transform: scale(1.04);
+}
+
+/* Mobile nav */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 28px;
+  height: 20px;
+  position: relative;
+  z-index: 1001;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 100%;
+  height: 1.5px;
+  background: var(--ivory);
+  position: absolute;
+  left: 0;
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.nav-toggle span:nth-child(1) { top: 2px; }
+.nav-toggle span:nth-child(2) { top: 50%; transform: translateY(-50%); }
+.nav-toggle span:nth-child(3) { bottom: 2px; }
+
+.nav-toggle.open span:nth-child(1) { top: 50%; transform: translateY(-50%) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { bottom: auto; top: 50%; transform: translateY(-50%) rotate(-45deg); }
+
+@media (max-width: 768px) {
+  .nav-wrapper {
+    top: var(--space-md);
+    left: var(--space-md);
+    right: var(--space-md);
+    transform: none;
+    max-width: none;
+  }
+  .nav {
+    padding: 10px var(--space-lg);
+    justify-content: space-between;
+  }
+  .nav-toggle { display: block; }
+  .nav-links {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(6, 6, 8, 0.95);
+    backdrop-filter: blur(var(--blur-xl));
+    -webkit-backdrop-filter: blur(var(--blur-xl));
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-2xl);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s, visibility 0.4s;
+    z-index: 1000;
+  }
+  .nav-links.open { opacity: 1; visibility: visible; }
+  .nav-links a {
+    font-size: 28px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .nav-cta {
+    font-size: 18px !important;
+    padding: 12px 28px !important;
+  }
+}
+
+/* ============================================================
+   SCROLL REVEAL SYSTEM — with spring physics
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.9s var(--ease-out-expo),
+              transform 0.9s var(--ease-out-expo);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.08s; }
+.reveal-delay-2 { transition-delay: 0.16s; }
+.reveal-delay-3 { transition-delay: 0.24s; }
+.reveal-delay-4 { transition-delay: 0.32s; }
+.reveal-delay-5 { transition-delay: 0.4s; }
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.95) translateY(20px);
+  transition: opacity 0.8s var(--ease-out-expo),
+              transform 0.8s var(--spring);
+}
+
+.reveal-scale.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-scale { opacity: 1; transform: none; transition: none; }
+  .preloader { display: none; }
+  .ambient-orb { animation: none !important; }
+}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-2xl);
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 var(--space-lg); }
+}
+
+.section {
+  padding: var(--space-6xl) 0;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .section { padding: var(--space-4xl) 0; }
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--amber);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.section-label::before {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: var(--amber);
+}
+
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04) 30%, rgba(255,255,255,0.04) 70%, transparent);
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-6xl) var(--space-2xl) var(--space-5xl);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--amber);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-2xl);
+  position: relative;
+  z-index: 1;
+}
+
+.hero-heading {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 9vw, 110px);
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: -0.035em;
+  color: var(--ivory);
+  max-width: 1000px;
+  margin-bottom: var(--space-2xl);
+  position: relative;
+  z-index: 1;
+}
+
+.hero-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.hero-word .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(110%);
+}
+
+.hero-heading .amber-text { color: var(--amber); }
+
+.hero-sub {
+  font-family: var(--font-body);
+  font-size: clamp(16px, 1.8vw, 19px);
+  color: var(--text-secondary);
+  max-width: 520px;
+  line-height: 1.7;
+  margin-bottom: var(--space-2xl);
+  position: relative;
+  z-index: 1;
+}
+
+.hero-cta-group {
+  display: flex;
+  gap: var(--space-md);
+  position: relative;
+  z-index: 1;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn-primary {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--near-black);
+  background: var(--ivory);
+  padding: 13px 28px;
+  border-radius: var(--radius-pill);
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s var(--spring);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.btn-primary:hover {
+  background: var(--amber);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 32px rgba(196, 122, 58, 0.3);
+}
+
+.btn-secondary {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--glass-bg);
+  padding: 13px 28px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--glass-border);
+  cursor: pointer;
+  backdrop-filter: blur(var(--blur-sm));
+  -webkit-backdrop-filter: blur(var(--blur-sm));
+  transition: all 0.4s var(--spring);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.btn-secondary:hover {
+  border-color: var(--glass-border-hover);
+  color: var(--text-primary);
+  background: var(--glass-bg-hover);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.hero-scroll-hint {
+  position: absolute;
+  bottom: var(--space-2xl);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 32px;
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.scroll-line::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--amber);
+  animation: scroll-line-move 2s ease-in-out infinite;
+}
+
+@keyframes scroll-line-move {
+  0% { top: -100%; }
+  50% { top: 100%; }
+  100% { top: 100%; }
+}
+
+/* ============================================================
+   FEATURED WORK — Glass cards with tilt
+   ============================================================ */
+.work-item {
+  padding: var(--space-4xl) 0;
+  position: relative;
+}
+
+.work-item + .work-item {
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.work-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: var(--space-3xl);
+  align-items: center;
+}
+
+.work-grid.reverse { direction: rtl; }
+.work-grid.reverse > * { direction: ltr; }
+
+@media (max-width: 900px) {
+  .work-grid, .work-grid.reverse {
+    grid-template-columns: 1fr;
+    direction: ltr;
+    gap: var(--space-2xl);
+  }
+}
+
+.work-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.work-number {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--amber);
+  letter-spacing: 0.1em;
+}
+
+.work-status {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  padding: 4px 12px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.work-status.live {
+  border-color: rgba(74, 222, 128, 0.25);
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.06);
+}
+
+.work-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4.5vw, 48px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--ivory);
+  margin-bottom: var(--space-md);
+}
+
+.work-desc {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--space-xl);
+  max-width: 460px;
+}
+
+.work-tech {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.work-tech-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.03em;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Glass preview card with tilt */
+.work-preview {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 16/10;
+  perspective: 1000px;
+}
+
+.work-preview-glass {
+  width: 100%;
+  height: 100%;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur-md)) saturate(1.4);
+  -webkit-backdrop-filter: blur(var(--blur-md)) saturate(1.4);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-inner-shadow),
+              0 20px 60px rgba(0, 0, 0, 0.4);
+  transition: transform 0.6s var(--ease-out-expo),
+              box-shadow 0.6s var(--ease-out-expo);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Specular top edge */
+.work-preview-glass::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  z-index: 2;
+}
+
+.work-preview:hover .work-preview-glass {
+  box-shadow: var(--glass-inner-shadow),
+              0 24px 80px rgba(0, 0, 0, 0.5),
+              0 0 60px var(--amber-subtle);
+}
+
+.work-preview-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-lg);
+  position: relative;
+  z-index: 1;
+}
+
+.work-preview-bar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: var(--space-md);
+}
+
+.work-preview-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.work-preview-dot:first-child { background: #ff5f57; }
+.work-preview-dot:nth-child(2) { background: #ffbd2e; }
+.work-preview-dot:nth-child(3) { background: #28c840; }
+
+.work-preview-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  justify-content: center;
+}
+
+.preview-widget {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-lg);
+}
+
+.preview-widget-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-xs);
+}
+
+.preview-widget-value {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2.5vw, 26px);
+  font-weight: 700;
+  color: var(--ivory);
+}
+
+.preview-widget-value .green { color: #4ade80; }
+.preview-widget-value .amber-val { color: var(--amber); }
+
+.preview-bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 36px;
+  margin-top: var(--space-xs);
+}
+
+.preview-bar {
+  flex: 1;
+  background: linear-gradient(to top, var(--amber), rgba(196, 122, 58, 0.4));
+  border-radius: 2px 2px 0 0;
+  opacity: 0.5;
+  transition: opacity 0.3s var(--ease-out-expo), transform 0.3s var(--spring);
+}
+
+.work-preview:hover .preview-bar { opacity: 0.8; }
+
+.preview-agents {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.preview-agent-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  text-align: center;
+}
+
+.preview-agent-name {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+}
+
+.preview-agent-status {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #4ade80;
+  margin: 4px auto 0;
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+}
+
+/* ============================================================
+   CAPABILITIES — Glass cards with tilt
+   ============================================================ */
+.section-heading {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--ivory);
+  margin-bottom: var(--space-lg);
+}
+
+.section-subheading {
+  font-size: 17px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 560px;
+}
+
+.capabilities-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+  margin-top: var(--space-3xl);
+}
+
+@media (max-width: 1024px) {
+  .capabilities-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .capabilities-grid { grid-template-columns: 1fr; }
+}
+
+.cap-card {
+  position: relative;
+  padding: var(--space-xl) var(--space-lg);
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur-sm)) saturate(1.3);
+  -webkit-backdrop-filter: blur(var(--blur-sm)) saturate(1.3);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-inner-shadow),
+              0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.5s var(--ease-out-expo);
+  overflow: hidden;
+}
+
+/* Specular edge */
+.cap-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 15%; right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+}
+
+/* Inner light on hover */
+.cap-card::after {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 0%), var(--amber-subtle) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-out-expo);
+  pointer-events: none;
+}
+
+.cap-card:hover {
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border-hover);
+  transform: translateY(-4px);
+  box-shadow: var(--glass-inner-shadow),
+              0 12px 40px rgba(0, 0, 0, 0.3),
+              0 0 40px var(--amber-subtle);
+}
+
+.cap-card:hover::after { opacity: 1; }
+
+.cap-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: rgba(196, 122, 58, 0.08);
+  border: 1px solid rgba(196, 122, 58, 0.12);
+  font-size: 18px;
+  color: var(--amber);
+  margin-bottom: var(--space-lg);
+}
+
+.cap-title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ivory);
+  margin-bottom: var(--space-sm);
+  letter-spacing: -0.01em;
+}
+
+.cap-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+/* ============================================================
+   AGENT CALLOUT — Elevated glass panel
+   ============================================================ */
+.agent-callout {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3xl);
+  margin-top: var(--space-4xl);
+  padding: var(--space-2xl) var(--space-3xl);
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg-elevated);
+  backdrop-filter: blur(var(--blur-lg)) saturate(1.5);
+  -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(1.5);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-inner-shadow),
+              0 16px 48px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Specular edge */
+.agent-callout::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+}
+
+@media (max-width: 768px) {
+  .agent-callout {
+    flex-direction: column;
+    gap: var(--space-xl);
+    padding: var(--space-xl) var(--space-lg);
+  }
+}
+
+.agent-visual {
+  display: flex;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.agent-node {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: rgba(196, 122, 58, 0.06);
+  border: 1px solid rgba(196, 122, 58, 0.12);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--amber);
+  letter-spacing: 0.05em;
+  transition: all 0.4s var(--spring);
+}
+
+.agent-node:hover {
+  transform: translateY(-3px) scale(1.05);
+  background: rgba(196, 122, 58, 0.1);
+  box-shadow: 0 8px 24px rgba(196, 122, 58, 0.15);
+}
+
+.agent-callout-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ivory);
+  margin-bottom: var(--space-sm);
+  letter-spacing: -0.02em;
+}
+
+.agent-callout-desc {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: var(--space-4xl);
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .about-grid { grid-template-columns: 1fr; gap: var(--space-2xl); }
+}
+
+.about-heading {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4.5vw, 50px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--ivory);
+  margin-bottom: var(--space-xl);
+}
+
+.about-text {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  margin-bottom: var(--space-lg);
+}
+
+.about-text strong {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Process flow — glass steps */
+.process-flow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.process-step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--blur-sm));
+  -webkit-backdrop-filter: blur(var(--blur-sm));
+  transition: all 0.4s var(--ease-out-expo);
+  position: relative;
+}
+
+.process-step::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+}
+
+.process-step:hover {
+  background: var(--glass-bg-hover);
+  transform: translateX(4px);
+  border-color: var(--glass-border-hover);
+}
+
+.process-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--amber);
+  letter-spacing: 0.1em;
+  min-width: 24px;
+}
+
+.process-name {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ivory);
+  flex: 1;
+}
+
+.process-arrow {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   METRICS — Glass counters
+   ============================================================ */
+.metrics-section {
+  padding: var(--space-4xl) 0;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+}
+
+@media (max-width: 900px) {
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 500px) {
+  .metrics-grid { grid-template-columns: 1fr 1fr; gap: var(--space-sm); }
+}
+
+.metric-item {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-lg);
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur-sm));
+  -webkit-backdrop-filter: blur(var(--blur-sm));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-inner-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 15%; right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+}
+
+.metric-value {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 52px);
+  font-weight: 700;
+  color: var(--ivory);
+  letter-spacing: -0.03em;
+}
+
+.metric-value .amber-val { color: var(--amber); }
+
+.metric-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: var(--space-sm);
+}
+
+/* ============================================================
+   CTA — Full bleed with glass
+   ============================================================ */
+.cta-section {
+  text-align: center;
+  padding: var(--space-6xl) var(--space-2xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(196, 122, 58, 0.1) 0%, transparent 60%);
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+.cta-heading {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 8vw, 96px);
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: -0.04em;
+  color: var(--ivory);
+  position: relative;
+  z-index: 1;
+}
+
+.cta-sub {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin: var(--space-xl) auto var(--space-2xl);
+  max-width: 420px;
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-email {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: var(--space-lg);
+  position: relative;
+  z-index: 1;
+}
+
+.cta-email a {
+  color: var(--amber);
+  transition: color 0.3s;
+}
+
+.cta-email a:hover { color: var(--amber-bright); }
+
+/* ============================================================
+   FOOTER — Minimal, glass-bordered
+   ============================================================ */
+.footer {
+  border-top: 1px solid var(--glass-border);
+  padding: var(--space-2xl) 0;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-xl);
+}
+
+@media (max-width: 600px) {
+  .footer-inner { flex-direction: column; gap: var(--space-lg); text-align: center; }
+}
+
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ivory);
+  letter-spacing: 0.12em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-logo-bar {
+  width: 16px;
+  height: 2px;
+  background: var(--amber);
+  border-radius: 1px;
+}
+
+.footer-links {
+  display: flex;
+  gap: var(--space-xl);
+  list-style: none;
+}
+
+.footer-links a {
+  font-size: 13px;
+  color: var(--text-muted);
+  transition: color 0.3s;
+}
+
+.footer-links a:hover { color: var(--text-primary); }
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--space-lg);
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+@media (max-width: 600px) {
+  .footer-bottom { flex-direction: column; gap: var(--space-sm); text-align: center; }
+}
+
+.footer-copy {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.footer-abn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.footer-location {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     AMBIENT MESH — Background light system
+     ============================================================ -->
+<div class="ambient-mesh" aria-hidden="true">
+  <div class="ambient-orb ambient-orb-1"></div>
+  <div class="ambient-orb ambient-orb-2"></div>
+  <div class="ambient-orb ambient-orb-3"></div>
+</div>
+
+<!-- ============================================================
+     PRELOADER
+     ============================================================ -->
+<div class="preloader" id="preloader">
+  <div class="preloader-logo" id="preloaderLogo">
+    <span class="char amber">A</span><span class="char">S</span><span class="char amber">D</span><span class="char">E</span><span class="char">S</span>
+  </div>
+  <div class="preloader-bar">
+    <div class="preloader-bar-fill" id="preloaderFill"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     NAVIGATION — Glass pill
+     ============================================================ -->
+<div class="nav-wrapper">
+  <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
+    <a href="#" class="nav-logo" aria-label="ASDES Studio home">
+      <span class="nav-logo-bar"></span>
+      ASDES
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#capabilities">Capabilities</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact" class="nav-cta">Get in touch</a></li>
+    </ul>
+  </nav>
+</div>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero" id="hero">
+  <div class="hero-eyebrow reveal">AI Development Studio / Sydney</div>
+
+  <h1 class="hero-heading" id="heroHeading">
+    <span class="hero-word"><span class="char">W</span><span class="char">e</span></span>
+    <span class="hero-word"><span class="char">&nbsp;</span><span class="char">b</span><span class="char">u</span><span class="char">i</span><span class="char">l</span><span class="char">d</span></span>
+    <span class="hero-word"><span class="char">&nbsp;</span><span class="char amber-text">p</span><span class="char amber-text">r</span><span class="char amber-text">o</span><span class="char amber-text">d</span><span class="char amber-text">u</span><span class="char amber-text">c</span><span class="char amber-text">t</span><span class="char amber-text">s</span></span><br>
+    <span class="hero-word"><span class="char">a</span><span class="char">t</span></span>
+    <span class="hero-word"><span class="char">&nbsp;</span><span class="char">t</span><span class="char">h</span><span class="char">e</span></span>
+    <span class="hero-word"><span class="char">&nbsp;</span><span class="char">s</span><span class="char">p</span><span class="char">e</span><span class="char">e</span><span class="char">d</span></span>
+    <span class="hero-word"><span class="char">&nbsp;</span><span class="char">o</span><span class="char">f</span></span>
+    <span class="hero-word"><span class="char">&nbsp;</span><span class="char">t</span><span class="char">h</span><span class="char">o</span><span class="char">u</span><span class="char">g</span><span class="char">h</span><span class="char">t</span><span class="char">.</span></span>
+  </h1>
+
+  <p class="hero-sub reveal reveal-delay-3">
+    One founder. Five AI agent teams. Shipping full-stack products from research to production in days, not months.
+  </p>
+
+  <div class="hero-cta-group reveal reveal-delay-4">
+    <a href="#work" class="btn-primary">See our work &darr;</a>
+    <a href="#contact" class="btn-secondary">Start a project</a>
+  </div>
+
+  <div class="hero-scroll-hint" aria-hidden="true">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FEATURED WORK
+     ============================================================ -->
+<section class="section" id="work">
+  <div class="container">
+    <div class="section-label reveal">Featured Work</div>
+
+    <!-- WealthStack -->
+    <div class="work-item">
+      <div class="work-grid reveal">
+        <div>
+          <div class="work-meta">
+            <span class="work-number">01</span>
+            <span class="work-status live">Live</span>
+          </div>
+          <h2 class="work-title">WealthStack</h2>
+          <p class="work-desc">
+            AI-powered wealth tracking built for Australians. Aggregates superannuation, property, shares, and crypto into a single real-time dashboard with AI-driven insights.
+          </p>
+          <div class="work-tech">
+            <span class="work-tech-tag">Next.js</span>
+            <span class="work-tech-tag">TypeScript</span>
+            <span class="work-tech-tag">Supabase</span>
+            <span class="work-tech-tag">Vercel</span>
+          </div>
+        </div>
+        <div class="work-preview" data-tilt>
+          <div class="work-preview-glass">
+            <div class="work-preview-inner">
+              <div class="work-preview-bar">
+                <div class="work-preview-dot"></div>
+                <div class="work-preview-dot"></div>
+                <div class="work-preview-dot"></div>
+              </div>
+              <div class="work-preview-content">
+                <div class="preview-widget">
+                  <div class="preview-widget-title">Net Worth</div>
+                  <div class="preview-widget-value">$847,290 <span class="green">+12.4%</span></div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                  <div class="preview-widget">
+                    <div class="preview-widget-title">Super</div>
+                    <div class="preview-widget-value" style="font-size: 16px;">$312K</div>
+                  </div>
+                  <div class="preview-widget">
+                    <div class="preview-widget-title">Property</div>
+                    <div class="preview-widget-value" style="font-size: 16px;">$485K</div>
+                  </div>
+                </div>
+                <div class="preview-bar-chart">
+                  <div class="preview-bar" style="height: 60%"></div>
+                  <div class="preview-bar" style="height: 80%"></div>
+                  <div class="preview-bar" style="height: 45%"></div>
+                  <div class="preview-bar" style="height: 100%"></div>
+                  <div class="preview-bar" style="height: 70%"></div>
+                  <div class="preview-bar" style="height: 55%"></div>
+                  <div class="preview-bar" style="height: 90%"></div>
+                  <div class="preview-bar" style="height: 65%"></div>
+                  <div class="preview-bar" style="height: 85%"></div>
+                  <div class="preview-bar" style="height: 75%"></div>
+                  <div class="preview-bar" style="height: 95%"></div>
+                  <div class="preview-bar" style="height: 88%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ScoreMyStack -->
+    <div class="work-item">
+      <div class="work-grid reverse reveal">
+        <div>
+          <div class="work-meta">
+            <span class="work-number">02</span>
+            <span class="work-status live">Live</span>
+          </div>
+          <h2 class="work-title">ScoreMyStack</h2>
+          <p class="work-desc">
+            The definitive SaaS comparison platform. 310 pages, 100 tools, 95 head-to-head comparisons, and an interactive Stack Scorer. Lighthouse 100/100/95/96.
+          </p>
+          <div class="work-tech">
+            <span class="work-tech-tag">Next.js</span>
+            <span class="work-tech-tag">MDX</span>
+            <span class="work-tech-tag">Keystatic</span>
+            <span class="work-tech-tag">pSEO</span>
+          </div>
+        </div>
+        <div class="work-preview" data-tilt>
+          <div class="work-preview-glass">
+            <div class="work-preview-inner">
+              <div class="work-preview-bar">
+                <div class="work-preview-dot"></div>
+                <div class="work-preview-dot"></div>
+                <div class="work-preview-dot"></div>
+              </div>
+              <div class="work-preview-content">
+                <div class="preview-widget">
+                  <div class="preview-widget-title">Stack Score</div>
+                  <div class="preview-widget-value"><span class="amber-val">87</span>/100</div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;">
+                  <div class="preview-widget" style="text-align: center;">
+                    <div class="preview-widget-title">Pages</div>
+                    <div class="preview-widget-value" style="font-size: 16px;">310</div>
+                  </div>
+                  <div class="preview-widget" style="text-align: center;">
+                    <div class="preview-widget-title">Tools</div>
+                    <div class="preview-widget-value" style="font-size: 16px;">100</div>
+                  </div>
+                  <div class="preview-widget" style="text-align: center;">
+                    <div class="preview-widget-title">Articles</div>
+                    <div class="preview-widget-value" style="font-size: 16px;">13</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ava Command Centre -->
+    <div class="work-item">
+      <div class="work-grid reveal">
+        <div>
+          <div class="work-meta">
+            <span class="work-number">03</span>
+            <span class="work-status live">Live</span>
+          </div>
+          <h2 class="work-title">Ava Command Centre</h2>
+          <p class="work-desc">
+            The operations dashboard that runs an empire. Orchestrates five AI agent teams, manages approval gates, dispatches work across models, and monitors every pipeline in real-time.
+          </p>
+          <div class="work-tech">
+            <span class="work-tech-tag">Next.js</span>
+            <span class="work-tech-tag">Supabase</span>
+            <span class="work-tech-tag">Claude</span>
+            <span class="work-tech-tag">Codex</span>
+          </div>
+        </div>
+        <div class="work-preview" data-tilt>
+          <div class="work-preview-glass">
+            <div class="work-preview-inner">
+              <div class="work-preview-bar">
+                <div class="work-preview-dot"></div>
+                <div class="work-preview-dot"></div>
+                <div class="work-preview-dot"></div>
+              </div>
+              <div class="work-preview-content">
+                <div class="preview-widget">
+                  <div class="preview-widget-title">System Status</div>
+                  <div class="preview-widget-value"><span class="green">&#9679;</span> All Systems Operational</div>
+                </div>
+                <div class="preview-agents">
+                  <div class="preview-agent-card">
+                    <div class="preview-agent-name">Varys</div>
+                    <div class="preview-agent-status"></div>
+                  </div>
+                  <div class="preview-agent-card">
+                    <div class="preview-agent-name">Moss</div>
+                    <div class="preview-agent-status"></div>
+                  </div>
+                  <div class="preview-agent-card">
+                    <div class="preview-agent-name">Schmidt</div>
+                    <div class="preview-agent-status"></div>
+                  </div>
+                  <div class="preview-agent-card">
+                    <div class="preview-agent-name">Tyrion</div>
+                    <div class="preview-agent-status"></div>
+                  </div>
+                  <div class="preview-agent-card">
+                    <div class="preview-agent-name">Loom</div>
+                    <div class="preview-agent-status"></div>
+                  </div>
+                  <div class="preview-agent-card">
+                    <div class="preview-agent-name">Router</div>
+                    <div class="preview-agent-status"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tended -->
+    <div class="work-item">
+      <div class="work-grid reverse reveal">
+        <div>
+          <div class="work-meta">
+            <span class="work-number">04</span>
+            <span class="work-status live">Live</span>
+          </div>
+          <h2 class="work-title">Tended</h2>
+          <p class="work-desc">
+            Your personal obligation desk. Bills, renewals, deadlines, and events - all captured via email, auto-categorised, and surfaced before they're due.
+          </p>
+          <div class="work-tech">
+            <span class="work-tech-tag">Next.js</span>
+            <span class="work-tech-tag">Supabase</span>
+            <span class="work-tech-tag">AI Parse</span>
+            <span class="work-tech-tag">iOS</span>
+          </div>
+        </div>
+        <div class="work-preview" data-tilt>
+          <div class="work-preview-glass">
+            <div class="work-preview-inner">
+              <div class="work-preview-bar">
+                <div class="work-preview-dot"></div>
+                <div class="work-preview-dot"></div>
+                <div class="work-preview-dot"></div>
+              </div>
+              <div class="work-preview-content">
+                <div class="preview-widget">
+                  <div class="preview-widget-title">Due This Week</div>
+                  <div class="preview-widget-value"><span class="amber-val">3</span> obligations</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <div class="preview-widget" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                      <div class="preview-widget-title" style="margin-bottom: 2px;">Car Insurance</div>
+                      <div style="font-size: 12px; color: var(--text-secondary);">Due Mar 24</div>
+                    </div>
+                    <div style="font-family: var(--font-mono); font-size: 12px; color: var(--amber);">$1,284</div>
+                  </div>
+                  <div class="preview-widget" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                      <div class="preview-widget-title" style="margin-bottom: 2px;">Domain Renewal</div>
+                      <div style="font-size: 12px; color: var(--text-secondary);">Due Mar 26</div>
+                    </div>
+                    <div style="font-family: var(--font-mono); font-size: 12px; color: var(--amber);">$42</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============================================================
+     CAPABILITIES
+     ============================================================ -->
+<section class="section" id="capabilities">
+  <div class="container">
+    <div class="section-label reveal">What We Build</div>
+    <h2 class="section-heading reveal">Every project gets a<br>dedicated AI team.</h2>
+    <p class="section-subheading reveal reveal-delay-1">Not a single developer with a ChatGPT tab open. A structured team of specialised AI agents - researching, designing, building, testing, and shipping in parallel.</p>
+
+    <div class="capabilities-grid">
+      <div class="cap-card reveal reveal-delay-1">
+        <span class="cap-icon" aria-hidden="true">&#9775;</span>
+        <h3 class="cap-title">AI-Powered Products</h3>
+        <p class="cap-desc">Full-stack applications with AI woven into the core - not bolted on. RAG pipelines, agent orchestration, intelligent automation.</p>
+      </div>
+      <div class="cap-card reveal reveal-delay-2">
+        <span class="cap-icon" aria-hidden="true">&#9670;</span>
+        <h3 class="cap-title">Product Strategy</h3>
+        <p class="cap-desc">Market research, competitive analysis, pricing strategy, and go-to-market planning. McKinsey-grade thinking at startup speed.</p>
+      </div>
+      <div class="cap-card reveal reveal-delay-3">
+        <span class="cap-icon" aria-hidden="true">&lt;/&gt;</span>
+        <h3 class="cap-title">Full-Stack Engineering</h3>
+        <p class="cap-desc">Next.js, TypeScript, Supabase, Vercel. Production-grade code with comprehensive test suites. Performance is a feature, not an afterthought.</p>
+      </div>
+      <div class="cap-card reveal reveal-delay-4">
+        <span class="cap-icon" aria-hidden="true">&#8734;</span>
+        <h3 class="cap-title">Autonomous Systems</h3>
+        <p class="cap-desc">Self-healing pipelines, approval gates, model routers, and agent teams that operate 24/7. We build systems that run while you sleep.</p>
+      </div>
+    </div>
+
+    <div class="agent-callout reveal">
+      <div class="agent-visual" aria-hidden="true">
+        <div class="agent-node">RSH</div>
+        <div class="agent-node">DSN</div>
+        <div class="agent-node">BLD</div>
+        <div class="agent-node">QA</div>
+      </div>
+      <div>
+        <h3 class="agent-callout-title">The agent team advantage</h3>
+        <p class="agent-callout-desc">Your project is staffed by a structured team: a Research agent scans the market, a Designer prototypes interfaces, a Builder writes production code, and a QA agent catches every edge case. Orchestrated by Ava, our AI operations system. The result: weeks of work compressed into days.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============================================================
+     ABOUT
+     ============================================================ -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="section-label reveal">The Studio</div>
+
+    <div class="about-grid">
+      <div class="reveal">
+        <h2 class="about-heading">Solo founder.<br>AI co-founder.<br><span style="color: var(--amber);">Unreasonable output.</span></h2>
+        <p class="about-text">
+          ASDES Group was founded in Sydney by <strong>Ashan</strong> with a thesis: a single technical founder, augmented by a structured AI operations system, can out-ship teams ten times larger.
+        </p>
+        <p class="about-text">
+          <strong>Ava</strong> is the AI co-founder - not a chatbot, but an operating system. She orchestrates five specialised agent teams, manages memory across sessions, routes work to the right model, and runs autonomous pipelines around the clock.
+        </p>
+        <p class="about-text">
+          The result is a studio that ships full products - researched, designed, built, tested, and deployed - in days. Not because we cut corners, but because the system eliminates everything that isn't building.
+        </p>
+      </div>
+
+      <div class="reveal reveal-delay-2">
+        <div class="process-flow">
+          <div class="process-step">
+            <span class="process-num">01</span>
+            <span class="process-name">Research</span>
+            <span class="process-arrow">&rarr;</span>
+          </div>
+          <div class="process-step">
+            <span class="process-num">02</span>
+            <span class="process-name">Design</span>
+            <span class="process-arrow">&rarr;</span>
+          </div>
+          <div class="process-step">
+            <span class="process-num">03</span>
+            <span class="process-name">Architect</span>
+            <span class="process-arrow">&rarr;</span>
+          </div>
+          <div class="process-step">
+            <span class="process-num">04</span>
+            <span class="process-name">Build</span>
+            <span class="process-arrow">&rarr;</span>
+          </div>
+          <div class="process-step">
+            <span class="process-num">05</span>
+            <span class="process-name">Test &amp; QA</span>
+            <span class="process-arrow">&rarr;</span>
+          </div>
+          <div class="process-step">
+            <span class="process-num">06</span>
+            <span class="process-name">Ship</span>
+            <span class="process-arrow">&#10003;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     METRICS
+     ============================================================ -->
+<section class="section metrics-section">
+  <div class="container">
+    <div class="metrics-grid">
+      <div class="metric-item reveal">
+        <div class="metric-value">5<span class="amber-val">.</span></div>
+        <div class="metric-label">Products shipped</div>
+      </div>
+      <div class="metric-item reveal reveal-delay-1">
+        <div class="metric-value">50K<span class="amber-val">+</span></div>
+        <div class="metric-label">Lines of production code</div>
+      </div>
+      <div class="metric-item reveal reveal-delay-2">
+        <div class="metric-value">310</div>
+        <div class="metric-label">Pages indexed</div>
+      </div>
+      <div class="metric-item reveal reveal-delay-3">
+        <div class="metric-value">5</div>
+        <div class="metric-label">AI agent teams deployed</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============================================================
+     CTA
+     ============================================================ -->
+<section class="section cta-section" id="contact">
+  <h2 class="cta-heading reveal">
+    Let's build<br>something<span style="color: var(--amber);">.</span>
+  </h2>
+  <p class="cta-sub reveal reveal-delay-1">
+    Got a product idea? Need an AI system built? We ship fast and we ship right.
+  </p>
+  <a href="mailto:hello@asdes.group" class="btn-primary reveal reveal-delay-2">
+    Start a conversation &rarr;
+  </a>
+  <div class="cta-email reveal reveal-delay-3">
+    or email directly: <a href="mailto:hello@asdes.group">hello@asdes.group</a>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <span class="footer-logo-bar"></span>
+        ASDES
+      </div>
+      <ul class="footer-links">
+        <li><a href="#work">Work</a></li>
+        <li><a href="#capabilities">Capabilities</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="https://github.com/Asdes-Group" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+      </ul>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">&copy; 2026 ASDES Group Pty Ltd. All rights reserved.</span>
+      <span class="footer-abn">ABN 54 941 236 991</span>
+      <span class="footer-location">Sydney, Australia</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+(function() {
+  'use strict';
+
+  // ---- Preloader ----
+  const preloader = document.getElementById('preloader');
+  const preloaderChars = preloader.querySelectorAll('.char');
+  const preloaderFill = document.getElementById('preloaderFill');
+  let count = 0;
+
+  document.body.style.overflow = 'hidden';
+
+  // Animate chars in
+  preloaderChars.forEach((c, i) => {
+    setTimeout(() => {
+      c.style.transition = 'transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.7s ease';
+      c.style.transform = 'translateY(0)';
+      c.style.opacity = '1';
+    }, 300 + i * 120);
+  });
+
+  // Progress bar
+  const counterInterval = setInterval(() => {
+    count += Math.floor(Math.random() * 6) + 2;
+    if (count > 100) count = 100;
+    preloaderFill.style.width = count + '%';
+    if (count >= 100) {
+      clearInterval(counterInterval);
+      setTimeout(() => {
+        preloader.classList.add('hidden');
+        document.body.style.overflow = '';
+        animateHero();
+      }, 500);
+    }
+  }, 60);
+
+  // ---- Hero text animation ----
+  function animateHero() {
+    const chars = document.querySelectorAll('#heroHeading .char');
+    chars.forEach((c, i) => {
+      setTimeout(() => {
+        c.style.transition = 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease';
+        c.style.opacity = '1';
+        c.style.transform = 'translateY(0)';
+      }, i * 22);
+    });
+  }
+
+  // ---- Scroll reveal (IntersectionObserver) ----
+  const revealElements = document.querySelectorAll('.reveal, .reveal-scale');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
+  revealElements.forEach(el => revealObserver.observe(el));
+
+  // ---- Nav scroll state ----
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 80);
+  }, { passive: true });
+
+  // ---- Mobile nav toggle ----
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    navToggle.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen);
+  });
+
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      navToggle.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // ---- Card tilt effect ----
+  const tiltCards = document.querySelectorAll('[data-tilt]');
+
+  tiltCards.forEach(card => {
+    const glass = card.querySelector('.work-preview-glass');
+
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+
+      const rotateX = (y - 0.5) * -8;
+      const rotateY = (x - 0.5) * 8;
+
+      glass.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      glass.style.transform = 'perspective(800px) rotateX(0) rotateY(0) scale(1)';
+    });
+  });
+
+  // ---- Capability card inner light tracking ----
+  const capCards = document.querySelectorAll('.cap-card');
+
+  capCards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      card.style.setProperty('--mouse-x', x + '%');
+      card.style.setProperty('--mouse-y', y + '%');
+    });
+  });
+
+  // ---- Smooth anchor scrolling ----
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // ---- Parallax ambient orbs on scroll ----
+  const orbs = document.querySelectorAll('.ambient-orb');
+  let ticking = false;
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        orbs.forEach((orb, i) => {
+          const speed = 0.03 + i * 0.015;
+          orb.style.transform = `translateY(${scrollY * speed}px)`;
+        });
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // ---- Console ----
+  console.log(
+    '%c ASDES Studio %c Built with precision. ',
+    'background: #C47A3A; color: #0C0C0E; font-weight: bold; padding: 4px 8px; border-radius: 4px 0 0 4px;',
+    'background: #0C0C0E; color: #F5F3EE; padding: 4px 8px; border-radius: 0 4px 4px 0;'
+  );
+
+})();
+</script>
+
+</body>
+</html>
