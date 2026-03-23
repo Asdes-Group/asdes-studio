@@ -1,16 +1,118 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#13111a"/>
-      <stop offset="100%" stop-color="#0a0a0f"/>
+    <!-- Background gradient -->
+    <linearGradient id="bg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#12101a"/>
+      <stop offset="50%" stop-color="#0a0a0f"/>
+      <stop offset="100%" stop-color="#0d0b14"/>
     </linearGradient>
-    <linearGradient id="accent" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#c4b5fd"/>
-      <stop offset="100%" stop-color="#8b5cf6"/>
+
+    <!-- Main letter gradient - rich violet spectrum -->
+    <linearGradient id="letter" x1="140" y1="80" x2="380" y2="440" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f0e8ff"/>
+      <stop offset="20%" stop-color="#d4c5ff"/>
+      <stop offset="45%" stop-color="#a78bfa"/>
+      <stop offset="70%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
     </linearGradient>
+
+    <!-- Glass highlight gradient -->
+    <linearGradient id="glass" x1="180" y1="80" x2="300" y2="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/>
+      <stop offset="40%" stop-color="#ffffff" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Edge light -->
+    <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e0d5ff" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Ambient glow behind letter -->
+    <filter id="back-glow">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="28"/>
+    </filter>
+
+    <!-- Subtle outer glow on letter -->
+    <filter id="letter-glow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur"/>
+      <feFlood flood-color="#a78bfa" flood-opacity="0.4"/>
+      <feComposite in2="blur" operator="in" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Shadow under letter -->
+    <filter id="drop">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="10" result="shadow"/>
+      <feOffset dy="8"/>
+      <feFlood flood-color="#000000" flood-opacity="0.5"/>
+      <feComposite in2="shadow" operator="in" result="shadow"/>
+      <feMerge>
+        <feMergeNode in="shadow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- The A shape as a reusable path -->
+    <path id="a-shape" d="
+      M 256 72
+      L 370 410
+      L 326 410
+      L 300 332
+      L 212 332
+      L 186 410
+      L 142 410
+      Z
+      M 224 292
+      L 288 292
+      L 256 168
+      Z
+    " fill-rule="evenodd"/>
+
+    <clipPath id="round"><rect width="512" height="512" rx="112"/></clipPath>
+    <clipPath id="a-clip"><use href="#a-shape"/></clipPath>
   </defs>
-  <rect width="100" height="100" rx="22" fill="url(#bg)"/>
-  <rect x="2" y="2" width="96" height="96" rx="20" fill="none" stroke="url(#accent)" stroke-width="1.5" opacity="0.25"/>
-  <text x="50" y="68" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-weight="400" font-size="62" fill="url(#accent)">A</text>
-  <rect x="18" y="78" width="28" height="4" rx="2" fill="#c4b5fd" opacity="0.5"/>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+
+  <!-- Subtle border -->
+  <rect x="2" y="2" width="508" height="508" rx="111" fill="none" stroke="#c4b5fd" stroke-width="1" opacity="0.07"/>
+
+  <g clip-path="url(#round)">
+    <!-- Aurora ambient glows -->
+    <ellipse cx="340" cy="140" rx="180" ry="160" fill="#7c3aed" opacity="0.07"/>
+    <ellipse cx="180" cy="380" rx="160" ry="140" fill="#a78bfa" opacity="0.05"/>
+
+    <!-- Back-glow behind the A -->
+    <use href="#a-shape" fill="#a78bfa" opacity="0.3" filter="url(#back-glow)"/>
+
+    <!-- Main A with shadow -->
+    <g filter="url(#drop)">
+      <use href="#a-shape" fill="url(#letter)"/>
+    </g>
+
+    <!-- Glass highlight layer clipped to A shape -->
+    <g clip-path="url(#a-clip)">
+      <!-- Top-left to center highlight sweep -->
+      <ellipse cx="230" cy="160" rx="140" ry="200" fill="url(#glass)"/>
+      <!-- Specular edge at top -->
+      <rect x="220" y="72" width="72" height="2" fill="#ffffff" opacity="0.5" rx="1"/>
+      <!-- Horizontal glass band across the middle -->
+      <rect x="140" y="240" width="240" height="1" fill="#ffffff" opacity="0.08"/>
+    </g>
+
+    <!-- Left edge highlight -->
+    <line x1="182" y1="310" x2="236" y2="130" stroke="url(#edge)" stroke-width="1.5" opacity="0.4"/>
+
+    <!-- Subtle letter glow -->
+    <use href="#a-shape" fill="none" stroke="#c4b5fd" stroke-width="0.5" opacity="0.2" filter="url(#letter-glow)"/>
+  </g>
+
+  <!-- Top specular rim on the rounded rect -->
+  <path d="M 180 4 Q 256 0, 332 4" stroke="#c4b5fd" stroke-width="1" fill="none" opacity="0.1"/>
 </svg>
